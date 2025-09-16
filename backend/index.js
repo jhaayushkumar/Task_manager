@@ -7,8 +7,21 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+// Trust proxy for deployments behind a proxy (Heroku/Render/Nginx)
+app.set('trust proxy', 1);
+
+// CORS: allow configured origins, fallback to permissive in dev
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map((s) => s.trim())
+  : true; // true == reflect request origin (dev)
+app.use(cors({ origin: allowedOrigins }));
+
 app.use(express.json());
+
+// Health check
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 
 // Routes
 app.use("/auth", require("./routes/authRoutes"));
