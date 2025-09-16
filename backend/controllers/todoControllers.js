@@ -5,11 +5,27 @@ const prisma = require("../config/db");
 
 exports.getTodos = async (req, res) => {
   try {
-    const todos = await prisma.todo.findMany({
-      include: { user: true },
-    });
-    res.json(todos);
+    const userId = req.user.userId; // Logged-in user
+    const { search } = req.query;   // search box input
 
+    // Search filter
+    const searchFilter = search
+      ? {
+          OR: [
+            { title: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+          ],
+        }
+      : {};
+
+    const todos = await prisma.todo.findMany({
+      where: { userId, ...searchFilter },
+      include: { user: true },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.json({ total: todos.length, todos });
+    
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
