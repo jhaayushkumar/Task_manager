@@ -20,8 +20,8 @@ model Todo {
   id          Int      @id @default(autoincrement())
   title       String
   description String?
-  todotype    String?
-  priority    Int
+  todotype    String? @default("general")
+  priority    Int?
   dueDate     DateTime?
   completed   Boolean  @default(false)
   

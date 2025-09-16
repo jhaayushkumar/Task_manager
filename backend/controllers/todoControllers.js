@@ -1,18 +1,21 @@
+const sendEmail = require("../utils/email");
+const getTaskSuggestion = require("../utils/ai");
+
 const prisma = require("../config/db");
 
-// Get all todos (with user info)
 exports.getTodos = async (req, res) => {
   try {
     const todos = await prisma.todo.findMany({
-      include: { user: true }, // associated user bhi milega
+      include: { user: true },
     });
     res.json(todos);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// Get single todo by ID
+
 exports.getTodoById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -20,16 +23,18 @@ exports.getTodoById = async (req, res) => {
       where: { id: parseInt(id) },
       include: { user: true },
     });
+
     if (!todo) return res.status(404).json({ error: "Todo not found" });
     res.json(todo);
+    
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// Create new todo
+
 exports.createTodo = async (req, res) => {
-  const { title, description, todotype, priority, dueDate, userId } = req.body;
+  const { title, description, todotype, priority, dueDate, userId, userEmail } = req.body;
   try {
     const todo = await prisma.todo.create({
       data: {
@@ -41,13 +46,25 @@ exports.createTodo = async (req, res) => {
         userId,
       },
     });
+
+    // AI suggestion
+    const suggestion = await getTaskSuggestion(title);
+
+    // Send Email
+    await sendEmail(
+      userEmail,
+      "New Todo Created",
+      `Your task "${title}" has been created.\nAI Suggestion: ${suggestion || "No suggestion"}`
+    );
+
     res.status(201).json(todo);
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Error creating todo" });
   }
 };
 
-// Update todo
+
 exports.updateTodo = async (req, res) => {
   const { id } = req.params;
   const { title, description, todotype, priority, dueDate, completed } = req.body;
@@ -69,7 +86,7 @@ exports.updateTodo = async (req, res) => {
   }
 };
 
-// Delete todo
+
 exports.deleteTodo = async (req, res) => {
   const { id } = req.params;
   try {
