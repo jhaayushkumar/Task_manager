@@ -14,7 +14,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-40 backdrop-blur bg-black/80 border-b border-gray-800">
+    <nav className="sticky top-0 z-40 backdrop-blur bg-black border-b border-gray-800">
       <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center gap-6">
           <Link to={token ? "/todos" : "/login"} className="font-bold text-lg text-gray-100">Task Manager</Link>

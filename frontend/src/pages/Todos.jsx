@@ -1,6 +1,11 @@
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { getTodos, createTodo, updateTodo, deleteTodo } from "../services/todos";
+import {
+  getTodos,
+  createTodo,
+  updateTodo,
+  deleteTodo,
+} from "../services/todos";
 import TodoCard from "../components/TodoCard";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
@@ -46,7 +51,14 @@ const Todos = () => {
     e.preventDefault();
     try {
       const created = await createTodo(
-        { title, description, todotype, priority, userId: user.id, userEmail: user.email },
+        {
+          title,
+          description,
+          todotype,
+          priority,
+          userId: user.id,
+          userEmail: user.email,
+        },
         token
       );
       setLastTodo(created);
@@ -98,15 +110,14 @@ const Todos = () => {
             />
             <TypewriterEffectSmooth
               words={[
-                { text: "Type exact titles in the search to preview matching tasks." },
+                {
+                  text: "Type exact titles in the search to preview matching tasks.",
+                },
               ]}
               className="mt-1 opacity-80 text-sm"
             />
           </div>
         </section>
-        <div className="flex justify-center mb-4">
-          <TextHoverEffect text="TASKS" />
-        </div>
 
         {showToast && (
           <div className="absolute right-6 top-6 flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded shadow animate-[slide-in_0.2s_ease-out,fade-out_1.2s_ease-in_forwards]">
@@ -145,7 +156,9 @@ const Todos = () => {
             <div className="absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"></div>
           </div>
 
-          <h2 className="text-xl font-semibold mb-3 text-gray-100">Quick Add Todo</h2>
+          <h2 className="text-xl font-semibold mb-3 text-gray-100">
+            Quick Add Todo
+          </h2>
           <div className="grid gap-3">
             <input
               type="text"
@@ -169,7 +182,9 @@ const Todos = () => {
                 onChange={(e) => setTodotype(e.target.value)}
                 required
               >
-                <option value="" disabled>Choose type</option>
+                <option value="" disabled>
+                  Choose type
+                </option>
                 <option value="work">Work</option>
                 <option value="personal">Personal</option>
                 <option value="urgent">Urgent</option>
@@ -187,7 +202,11 @@ const Todos = () => {
               />
             </div>
             <div className="group inline-flex w-full justify-center">
-              <HoverBorderGradient containerClassName="rounded-lg w-full" as="div" className="w-full">
+              <HoverBorderGradient
+                containerClassName="rounded-lg w-full"
+                as="div"
+                className="w-full"
+              >
                 <StatefulButton onClick={handleCreate} className="w-full">
                   Add Todo
                 </StatefulButton>
@@ -198,29 +217,46 @@ const Todos = () => {
 
         <div className="mt-6 text-center text-gray-600 dark:text-gray-300">
           <p>
-            All todos show in the <Link to="/profile" className="text-indigo-600 dark:text-indigo-400 underline">Profile</Link> and you can manage (complete/delete) them there.
+            All todos show in the{" "}
+            <Link
+              to="/profile"
+              className="text-indigo-600 dark:text-indigo-400 underline"
+            >
+              Profile
+            </Link>{" "}
+            and you can manage (complete/delete) them there.
           </p>
         </div>
-
+        <div className="flex justify-center mb-4 mt-4">
+          <TextHoverEffect text="TASKS" />
+        </div>
         <div className="mt-8 grid md:grid-cols-3 gap-4 text-sm text-gray-600 dark:text-gray-300">
           <div className="p-4 rounded-xl border border-white/10 bg-gray-900/60">
             <div className="font-semibold mb-1">Example: Work</div>
-            <div className="opacity-80">"Finish project report" priority 5, type work.</div>
+            <div className="opacity-80">
+              "Finish project report" priority 5, type work.
+            </div>
           </div>
           <div className="p-4 rounded-xl border border-white/10 bg-gray-900/60">
             <div className="font-semibold mb-1">Example: Personal</div>
-            <div className="opacity-80">"Buy groceries" priority 3, type personal.</div>
+            <div className="opacity-80">
+              "Buy groceries" priority 3, type personal.
+            </div>
           </div>
           <div className="p-4 rounded-xl border border-white/10 bg-gray-900/60">
             <div className="font-semibold mb-1">Example: Urgent</div>
-            <div className="opacity-80">"Pay bills" priority 4, type urgent.</div>
+            <div className="opacity-80">
+              "Pay bills" priority 4, type urgent.
+            </div>
           </div>
         </div>
 
         {search.trim().length > 0 && (
           <div className="relative overflow-hidden isolate mt-8 bg-gray-950/80 backdrop-blur p-5 rounded-xl shadow-md border border-white/10 w-full max-w-2xl mx-auto">
             <GlowingEffect />
-            <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">Search results</h3>
+            <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">
+              Search results
+            </h3>
             <div className="grid gap-3">
               {exactMatches.map((todo) => (
                 <TodoCard
@@ -257,9 +293,15 @@ const Todos = () => {
                 <div className="bg-white w-16 h-16 mb-2 rounded-full text-3xl text-indigo-600 grid place-items-center mx-auto">
                   <FiCheckCircle />
                 </div>
-                <h3 className="text-2xl font-bold text-center mb-2">Todo added!</h3>
+                <h3 className="text-2xl font-bold text-center mb-2">
+                  Todo added!
+                </h3>
                 <p className="text-center mb-6 opacity-90">
-                  {lastTodo ? `${lastTodo.title} (${lastTodo.todotype || 'type'}) • Priority ${lastTodo.priority}` : 'Your task was created successfully.'}
+                  {lastTodo
+                    ? `${lastTodo.title} (${
+                        lastTodo.todotype || "type"
+                      }) • Priority ${lastTodo.priority}`
+                    : "Your task was created successfully."}
                 </p>
                 <div className="flex gap-2">
                   <button
