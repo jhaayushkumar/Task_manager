@@ -207,7 +207,7 @@ const Todos = () => {
                 as="div"
                 className="w-full"
               >
-                <StatefulButton onClick={handleCreate} className="w-full">
+                <StatefulButton onClick={handleCreate} useSubmit className="w-full">
                   Add Todo
                 </StatefulButton>
               </HoverBorderGradient>
