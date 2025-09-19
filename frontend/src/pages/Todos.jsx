@@ -1,20 +1,25 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, Suspense, lazy } from "react";
+import { toast, Bounce } from "react-toastify";
 import { AuthContext } from "../context/AuthContext";
-import {
-  getTodos,
-  createTodo,
-  updateTodo,
-  deleteTodo,
-} from "../services/todos";
+import { getTodos, createTodo } from "../services/todos";
 import TodoCard from "../components/TodoCard";
 import { Link } from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
 import { FiCheckCircle } from "react-icons/fi";
-import { TextHoverEffect } from "../components/ui/TextHoverEffect";
 import { StatefulButton } from "../components/ui/StatefulButton";
 import { HoverBorderGradient } from "../components/ui/HoverBorderGradient";
-import { TypewriterEffectSmooth } from "../components/ui/TypewriterEffectSmooth";
-import { GlowingEffect } from "../components/ui/GlowingEffect";
+
+// Lazy-load decorative/heavy UI components to improve initial load time
+const TextHoverEffect = lazy(() =>
+  import("../components/ui/TextHoverEffect").then((m) => ({ default: m.TextHoverEffect }))
+);
+const TypewriterEffectSmooth = lazy(() =>
+  import("../components/ui/TypewriterEffectSmooth").then((m) => ({ default: m.TypewriterEffectSmooth }))
+);
+const GlowingEffect = lazy(() =>
+  import("../components/ui/GlowingEffect").then((m) => ({ default: m.GlowingEffect }))
+);
 
 const Todos = () => {
   const { token, user } = useContext(AuthContext);
@@ -24,7 +29,7 @@ const Todos = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState(1);
-  const [error, setError] = useState("");
+  // errors handled via react-toastify
   const [todotype, setTodotype] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -52,8 +57,19 @@ const Todos = () => {
     try {
       // Frontend validation: title and type are required
       if (!title.trim() || !todotype) {
-        setError("Title and type are required");
-        setTimeout(() => setError(""), 1500);
+        toast.error("Please enter the title and choose todo type", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          newestOnTop: true,
+          closeOnClick: true,
+          rtl: false,
+          pauseOnFocusLoss: true,
+          draggable: true,
+          pauseOnHover: true,
+          theme: "dark",
+          transition: Bounce,
+        });
         return;
       }
       const created = await createTodo(
@@ -77,8 +93,20 @@ const Todos = () => {
       setTimeout(() => setShowToast(false), 1200);
     } catch (err) {
       console.error("Error creating todo:", err);
-      setError("Failed to add todo");
-      setTimeout(() => setError(""), 1200);
+      const apiMsg = err?.response?.data?.error;
+      toast.error(apiMsg || "Failed to add todo", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        theme: "dark",
+        transition: Bounce,
+      });
     }
   };
 
@@ -97,31 +125,37 @@ const Todos = () => {
       <div className="w-full max-w-6xl mx-auto px-4 md:px-6 py-6 relative">
         <section className="rounded-2xl p-6 mb-6 bg-gradient-to-r from-indigo-700 to-purple-700 text-white shadow max-w-3xl mx-auto">
           <div className="text-center">
-            <TypewriterEffectSmooth
-              words={[
-                { text: "Plan", className: "font-extrabold" },
-                { text: "smarter.", className: "font-extrabold" },
-                { text: "Do", className: "font-extrabold" },
-                { text: "faster.", className: "font-extrabold" },
-              ]}
-              className="text-3xl md:text-4xl"
-            />
-            <TypewriterEffectSmooth
-              words={[
-                { text: "Add tasks in a click," },
-                { text: "get AI tips," },
-                { text: "and track progress effortlessly." },
-              ]}
-              className="mt-2 opacity-90"
-            />
-            <TypewriterEffectSmooth
-              words={[
-                {
-                  text: "Type exact titles in the search to preview matching tasks.",
-                },
-              ]}
-              className="mt-1 opacity-80 text-sm"
-            />
+            <Suspense fallback={<div className="h-8" />}> 
+              <TypewriterEffectSmooth
+                words={[
+                  { text: "Plan", className: "font-extrabold" },
+                  { text: "smarter.", className: "font-extrabold" },
+                  { text: "Do", className: "font-extrabold" },
+                  { text: "faster.", className: "font-extrabold" },
+                ]}
+                className="text-3xl md:text-4xl"
+              />
+            </Suspense>
+            <Suspense fallback={<div className="h-6" />}> 
+              <TypewriterEffectSmooth
+                words={[
+                  { text: "Add tasks in a click," },
+                  { text: "get AI tips," },
+                  { text: "and track progress effortlessly." },
+                ]}
+                className="mt-2 opacity-90"
+              />
+            </Suspense>
+            <Suspense fallback={<div className="h-5" />}> 
+              <TypewriterEffectSmooth
+                words={[
+                  {
+                    text: "Type exact titles in the search to preview matching tasks.",
+                  },
+                ]}
+                className="mt-1 opacity-80 text-sm"
+              />
+            </Suspense>
           </div>
         </section>
 
@@ -131,11 +165,7 @@ const Todos = () => {
             <span>Todo added successfully</span>
           </div>
         )}
-        {error && (
-          <div className="absolute right-6 top-6 flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded shadow animate-[slide-in_0.2s_ease-out,fade-out_1.2s_ease-in_forwards]">
-            <span>Failed to add todo</span>
-          </div>
-        )}
+        {/* errors are shown via react-toastify */}
 
         <div className="mb-4">
           <div className="w-full max-w-2xl mx-auto">
@@ -154,7 +184,9 @@ const Todos = () => {
           onSubmit={handleCreate}
           className="relative overflow-hidden isolate bg-gray-950/80 backdrop-blur p-7 rounded-2xl shadow-md border border-white/10 ring-1 ring-white/10 transition hover:ring-white/40 w-full max-w-2xl mx-auto min-h-[380px]"
         >
-          <GlowingEffect />
+          <Suspense fallback={null}>
+            <GlowingEffect />
+          </Suspense>
           {/* Dark Grid background layers inside form */}
           <div className="pointer-events-none absolute inset-0 -z-10">
             <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900 to-black opacity-80 dark:opacity-90"></div>
@@ -234,7 +266,9 @@ const Todos = () => {
           </p>
         </div>
         <div className="flex justify-center mb-4 mt-4">
-          <TextHoverEffect text="TASKS" />
+          <Suspense fallback={<div className="h-10" />}>
+            <TextHoverEffect text="TASKS" />
+          </Suspense>
         </div>
         <div className="mt-8 grid md:grid-cols-3 gap-4 text-sm text-gray-600 dark:text-gray-300">
           <div className="p-4 rounded-xl border border-white/10 bg-gray-900/60">
@@ -259,7 +293,9 @@ const Todos = () => {
 
         {search.trim().length > 0 && (
           <div className="relative overflow-hidden isolate mt-8 bg-gray-950/80 backdrop-blur p-5 rounded-xl shadow-md border border-white/10 w-full max-w-2xl mx-auto">
-            <GlowingEffect />
+            <Suspense fallback={null}>
+              <GlowingEffect />
+            </Suspense>
             <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">
               Search results
             </h3>

@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Toastify custom styles */
+.Toastify__toast {
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+.Toastify__toast--error.cute-error {
+  background: linear-gradient(135deg, #fda4af 0%, #fb7185 100%);
+  color: #1f2937;
+}
+.Toastify__toast--error.cute-error .Toastify__toast-icon svg {
+  fill: #1f2937;
+}
+
+/* Violet variant below navbar */
+.Toastify__toast--error.cute-error-violet {
+  background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 50%, #818cf8 100%);
+  color: #0f172a;
+}
+.Toastify__toast--error.cute-error-violet .Toastify__toast-icon svg {
+  fill: #0f172a;
+}
+
+/* Red error with blue-violet progress bar */
+.Toastify__toast--error.cute-error-red {
+  background: #ef4444;
+  color: #fff;
+}
+.Toastify__toast--error.cute-error-red .Toastify__toast-icon svg {
+  fill: #fff;
+}
+.cute-progress-blueviolet {
+  background: linear-gradient(90deg, #60a5fa 0%, #8b5cf6 100%);
+}
