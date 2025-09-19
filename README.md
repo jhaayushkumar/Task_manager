@@ -43,11 +43,6 @@
 - Frontend (Vercel): https://personal-task-manager-iota.vercel.app
 - Backend (Render): https://personal-task-manager-acbx.onrender.com
 
-## Live URLs
-
-- Frontend (Vercel): https://personal-task-manager-iota.vercel.app
-- Backend (Render): https://personal-task-manager-acbx.onrender.com
-
 ## Tech Stack
 
 - Frontend: React, Vite, TailwindCSS, Framer Motion, React Icons, react-toastify
