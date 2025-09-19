@@ -50,6 +50,12 @@ const Todos = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+      // Frontend validation: title and type are required
+      if (!title.trim() || !todotype) {
+        setError("Title and type are required");
+        setTimeout(() => setError(""), 1500);
+        return;
+      }
       const created = await createTodo(
         {
           title,
@@ -207,7 +213,7 @@ const Todos = () => {
                 as="div"
                 className="w-full"
               >
-                <StatefulButton onClick={handleCreate} useSubmit className="w-full">
+                <StatefulButton onClick={handleCreate} className="w-full">
                   Add Todo
                 </StatefulButton>
               </HoverBorderGradient>

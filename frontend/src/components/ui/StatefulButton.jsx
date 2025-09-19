@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { FiLoader, FiCheck } from "react-icons/fi";
 
-export const StatefulButton = ({ onClick, children, className = "", useSubmit = false }) => {
+export const StatefulButton = ({ onClick, children, className = "" }) => {
   const [state, setState] = useState("idle"); // idle | loading | success
 
   const handleClick = async (e) => {
@@ -19,10 +19,10 @@ export const StatefulButton = ({ onClick, children, className = "", useSubmit = 
 
   return (
     <button
-      onClick={useSubmit ? undefined : handleClick}
+      onClick={handleClick}
       className={`relative inline-flex items-center justify-center rounded-lg px-4 py-2 text-white font-semibold bg-gradient-to-r from-pink-500 via-fuchsia-500 to-cyan-400 ring-1 ring-pink-300/40 shadow-[0_8px_22px_rgba(236,72,153,0.35),0_6px_18px_rgba(34,211,238,0.25)] hover:shadow-[0_12px_30px_rgba(236,72,153,0.45),0_10px_24px_rgba(34,211,238,0.35)] transition-all disabled:opacity-70 ${className}`}
       disabled={state === "loading"}
-      type={useSubmit ? "submit" : "button"}
+      type="button"
     >
       <span className={`${state !== "idle" ? "opacity-0" : "opacity-100"} transition-opacity`}>{children}</span>
       {state === "loading" && (

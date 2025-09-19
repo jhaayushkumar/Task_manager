@@ -63,6 +63,9 @@ exports.getTodoById = async (req, res) => {
 exports.createTodo = async (req, res) => {
   const { title, description, todotype, priority, dueDate, userId, userEmail } = req.body;
   try {
+    if (!title || !title.trim() || !todotype) {
+      return res.status(400).json({ error: "Title and type are required" });
+    }
     const todo = await prisma.todo.create({
       data: {
         title,
