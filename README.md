@@ -1,10 +1,47 @@
-# Personal Task Manager
+<div align="center">
+  <img src="frontend/public/vite.svg" alt="Logo" width="72" />
+  <h1>Personal Task Manager</h1>
+  <p>Plan smarter, do faster. A full‑stack Todo app with authentication, priorities, search, and a modern UI.</p>
 
-Plan smarter, do faster. A full‑stack Todo app with authentication, priorities, search, and a modern UI.
+  <p>
+    <a href="https://personal-task-manager-iota.vercel.app"><img alt="Frontend" src="https://img.shields.io/badge/Frontend-Vercel-000000?logo=vercel" /></a>
+    <a href="https://personal-task-manager-acbx.onrender.com"><img alt="Backend" src="https://img.shields.io/badge/Backend-Render-46E3B7?logo=render&logoColor=000" /></a>
+    <img alt="React" src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=000" />
+    <img alt="Vite" src="https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=fff" />
+    <img alt="Tailwind" src="https://img.shields.io/badge/TailwindCSS-3-38BDF8?logo=tailwindcss&logoColor=fff" />
+    <img alt="Express" src="https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=fff" />
+    <img alt="Prisma" src="https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma" />
+  </p>
+</div>
 
-- Frontend: React + Vite + TailwindCSS (deployed on Vercel)
-- Backend: Node.js + Express + Prisma (deployed on Render)
-- Database: Prisma ORM (see prisma/schema.prisma)
+---
+
+## Table of Contents
+
+- Features
+- Live URLs
+- Tech Stack
+- Folder Structure
+- Getting Started (Local)
+- Environment Variables
+- Build & Deploy
+- API Overview
+- Contributing
+- Screenshots
+- License
+
+## Features
+
+- Auth: Signup/Login with JWT
+- Todos: Create, search, update, delete, priorities (1–5)
+- Protected routes with token interceptor
+- Modern UI: animations, gradient toasts, success modal
+- Responsive layout and dark theme
+
+## Live URLs
+
+- Frontend (Vercel): https://personal-task-manager-iota.vercel.app
+- Backend (Render): https://personal-task-manager-acbx.onrender.com
 
 ## Live URLs
 
@@ -17,7 +54,7 @@ Plan smarter, do faster. A full‑stack Todo app with authentication, priorities
 - Backend: Express, Prisma, bcrypt, jsonwebtoken, CORS
 - Tooling: ESLint, PostCSS, Vite
 
-## Monorepo Structure
+## Folder Structure
 
 ```
 /Personal-Task--Manager
@@ -173,6 +210,14 @@ Backend:
 - 500 on create todo: Backend must be on the latest code; redeploy Render and retry.
 - CORS errors: Confirm backend URL uses HTTPS and CORS middleware is active.
 - Env not picked up on Vercel: Set `VITE_API_BASE` for both Preview and Production and redeploy.
+
+## Screenshots
+
+> Replace with your own screenshots or GIFs
+
+| Login | Todos |
+| --- | --- |
+| ![Login](https://via.placeholder.com/600x350?text=Login) | ![Todos](https://via.placeholder.com/600x350?text=Todos) |
 
 ## License
 
