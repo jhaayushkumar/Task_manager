@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="frontend/public/vite.svg" alt="Logo" width="72" />
+  <img src="https://cdn.dribbble.com/userupload/23552221/file/original-102dacce4d56ed0f97ec8780fc7b6512.jpg" alt="Project Logo" width="96" />
   <h1>Personal Task Manager</h1>
   <p>Plan smarter, do faster. A full‑stack Todo app with authentication, priorities, search, and a modern UI.</p>
 
