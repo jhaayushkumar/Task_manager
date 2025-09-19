@@ -7,7 +7,12 @@ exports.signup = async (req, res) => {
   const { name, email, password } = req.body;
   try {
     // Check if user already exists
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const existingUser = await prisma.user.findUnique({ 
+      where: { 
+        email
+      } 
+    });
+    
     if (existingUser) return res.status(400).json({ error: "Email already registered" });
 
     // Hash password
@@ -19,6 +24,7 @@ exports.signup = async (req, res) => {
     });
 
     res.status(201).json({ message: "User created successfully", userId: user.id });
+    
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -29,11 +35,17 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
     // Check user
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ 
+      where: { 
+      email 
+  
+    } });
+
     if (!user) return res.status(404).json({ error: "User not found" });
 
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
     // Generate JWT
@@ -44,6 +56,7 @@ exports.login = async (req, res) => {
     );
 
     res.json({ message: "Login successful", token });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

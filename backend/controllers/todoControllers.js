@@ -1,27 +1,34 @@
 const sendEmail = require("../utils/email");
-const getTaskSuggestion = require("../utils/ai");
-
 const prisma = require("../config/db");
 
 exports.getTodos = async (req, res) => {
   try {
-    const userId = req.user.userId; // Logged-in user
-    const { search } = req.query;   // search box input
+    const userId = req.user.userId; 
+    const { search } = req.query;
 
-    // Search filter
     const searchFilter = search
       ? {
           OR: [
-            { title: { contains: search, mode: "insensitive" } },
-            { description: { contains: search, mode: "insensitive" } },
+            { title: { 
+              contains: search, mode: "insensitive" 
+            } },
+            { description: { 
+              contains: search, mode: "insensitive" 
+            } },
           ],
         }
       : {};
 
     const todos = await prisma.todo.findMany({
-      where: { userId, ...searchFilter },
-      include: { user: true },
-      orderBy: { createdAt: "desc" },
+      where: { 
+        userId, ...searchFilter 
+      },
+      include: { 
+        user: true 
+      },
+      orderBy: { 
+        createdAt: "desc" 
+      },
     });
 
     res.json({ total: todos.length, todos });
@@ -36,8 +43,12 @@ exports.getTodoById = async (req, res) => {
   const { id } = req.params;
   try {
     const todo = await prisma.todo.findUnique({
-      where: { id: parseInt(id) },
-      include: { user: true },
+      where: { 
+        id: parseInt(id) 
+      },
+      include: { 
+        user: true 
+      },
     });
 
     if (!todo) return res.status(404).json({ error: "Todo not found" });
@@ -62,9 +73,6 @@ exports.createTodo = async (req, res) => {
         userId,
       },
     });
-
-    // AI suggestion
-    const suggestion = await getTaskSuggestion(title);
 
     // Send Email
     await sendEmail(
@@ -97,6 +105,7 @@ exports.updateTodo = async (req, res) => {
       },
     });
     res.json(todo);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -107,9 +116,12 @@ exports.deleteTodo = async (req, res) => {
   const { id } = req.params;
   try {
     await prisma.todo.delete({
-      where: { id: parseInt(id) },
+      where: { 
+        id: parseInt(id) 
+      },
     });
     res.json({ message: "Todo deleted successfully" });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
