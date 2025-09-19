@@ -210,9 +210,10 @@ Backend:
 
 > Replace with your own screenshots or GIFs
 
-| Login | Todos |
-| --- | --- |
-| ![Login](https://via.placeholder.com/600x350?text=Login) | ![Todos](https://via.placeholder.com/600x350?text=Todos) |
+| Sign Up |
+
+<img width="1512" height="816" alt="Screenshot 2025-09-19 at 7 51 25 PM" src="https://github.com/user-attachments/assets/f5572bd5-3cf9-4a21-9b17-6b42ac1b6a5c" />
+
 
 ## License
 
