@@ -61,11 +61,15 @@ exports.getTodoById = async (req, res) => {
 
 
 exports.createTodo = async (req, res) => {
-  const { title, description, todotype, priority, dueDate, userId, userEmail } = req.body;
+  const { title, description, todotype, priority, dueDate, userEmail } = req.body;
   try {
     if (!title || !title.trim() || !todotype) {
       return res.status(400).json({ error: "Title and type are required" });
     }
+    
+    // Get userId from authenticated user (set by auth middleware)
+    const userId = req.user.userId;
+    
     const todo = await prisma.todo.create({
       data: {
         title,
@@ -81,9 +85,10 @@ exports.createTodo = async (req, res) => {
     res.status(201).json(todo);
 
     // Send email asynchronously without blocking response
-    if (userEmail) {
+    const emailToUse = userEmail || req.user.email;
+    if (emailToUse) {
       sendEmail(
-        userEmail,
+        emailToUse,
         "New Todo Created",
         `Your task "${title}" has been created.`
       ).catch((emailErr) => {
