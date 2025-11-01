@@ -15,7 +15,6 @@ const Contact = () => {
         </section>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Creator card */}
           <div className="relative overflow-hidden isolate rounded-2xl shadow-md border border-white/10 ring-1 ring-white/10 p-6">
             <GlowingEffect />
             <div className="flex items-center gap-4">

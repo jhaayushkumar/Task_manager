@@ -10,7 +10,10 @@ export const getTodos = async (token, search) => {
 };
 
 export const createTodo = async (data, token) => {
+  console.log("[createTodo] Sending request with data:", data);
   const res = await http.post(BASE_URL, data);
+  console.log("[createTodo] Response received:", res);
+  console.log("[createTodo] Response data:", res.data);
   return res.data;
 };
 

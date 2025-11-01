@@ -3,16 +3,28 @@ import { motion } from "framer-motion";
 import { FiLoader, FiCheck } from "react-icons/fi";
 
 export const StatefulButton = ({ onClick, children, className = "" }) => {
-  const [state, setState] = useState("idle"); // idle | loading | success
+  const [state, setState] = useState("idle");
 
   const handleClick = async (e) => {
-    if (state === "loading") return;
+    if (state === "loading") {
+      console.log("StatefulButton: Already loading, ignoring click");
+      return;
+    }
+    
+    console.log("StatefulButton: Setting state to loading");
     setState("loading");
+    
     try {
-      await onClick?.(e);
+      console.log("StatefulButton: Calling onClick handler...");
+      const result = await onClick?.(e);
+      console.log("StatefulButton: ✅ onClick completed successfully", result);
       setState("success");
-      setTimeout(() => setState("idle"), 1200);
-    } catch {
+      setTimeout(() => {
+        console.log("StatefulButton: Resetting to idle");
+        setState("idle");
+      }, 1200);
+    } catch (error) {
+      console.error("StatefulButton: ❌ onClick failed", error);
       setState("idle");
     }
   };

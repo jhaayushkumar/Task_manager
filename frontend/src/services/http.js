@@ -4,6 +4,7 @@ const baseURL = import.meta.env.VITE_API_BASE || "http://localhost:3000";
 
 const http = axios.create({
   baseURL,
+  timeout: 30000, // 30 second timeout
 });
 
 // Attach auth token from localStorage if present
@@ -21,12 +22,17 @@ http.interceptors.request.use((config) => {
 });
 
 http.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    const method = (res?.config?.method || "").toUpperCase();
+    const url = `${res?.config?.baseURL || ""}${res?.config?.url || ""}`;
+    console.log(`[HTTP ${method}] ${url} → ✅ ${res.status}`, res.data);
+    return res;
+  },
   (error) => {
     const method = (error?.config?.method || "").toUpperCase();
     const url = `${error?.config?.baseURL || ""}${error?.config?.url || ""}`;
     const msg = error?.response?.data?.error || error?.message || "Request failed";
-    console.warn(`[HTTP ${method}] ${url} → ${msg}`);
+    console.warn(`[HTTP ${method}] ${url} → ❌ ${msg}`);
     return Promise.reject(error);
   }
 );

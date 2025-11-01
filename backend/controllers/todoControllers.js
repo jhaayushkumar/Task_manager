@@ -77,21 +77,19 @@ exports.createTodo = async (req, res) => {
       },
     });
 
-    // Best-effort email notification; do not block response
-    if (userEmail) {
-      try {
-        await sendEmail(
-          userEmail,
-          "New Todo Created",
-          `Your task "${title}" has been created.`
-        );
-      } catch (emailErr) {
-        // Log and continue without failing the request
-        console.warn("Email send failed:", emailErr?.message || emailErr);
-      }
-    }
-
+    // Send response immediately
     res.status(201).json(todo);
+
+    // Send email asynchronously without blocking response
+    if (userEmail) {
+      sendEmail(
+        userEmail,
+        "New Todo Created",
+        `Your task "${title}" has been created.`
+      ).catch((emailErr) => {
+        console.warn("Email send failed:", emailErr?.message || emailErr);
+      });
+    }
 
   } catch (error) {
     res.status(500).json({ error: error.message || "Error creating todo" });

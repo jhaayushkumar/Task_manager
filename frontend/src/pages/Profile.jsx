@@ -20,7 +20,6 @@ const Profile = () => {
       const data = await getTodos(token);
       setTodos(Array.isArray(data.todos) ? data.todos : []);
     } catch (e) {
-      // ignore for now
     } finally {
       setLoading(false);
     }

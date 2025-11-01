@@ -4,13 +4,11 @@ import { AuthContext } from "../context/AuthContext";
 import { getTodos, createTodo } from "../services/todos";
 import TodoCard from "../components/TodoCard";
 import { Link } from "react-router-dom";
-// eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
 import { FiCheckCircle } from "react-icons/fi";
 import { StatefulButton } from "../components/ui/StatefulButton";
 import { HoverBorderGradient } from "../components/ui/HoverBorderGradient";
 
-// Lazy-load decorative/heavy UI components to improve initial load time
 const TextHoverEffect = lazy(() =>
   import("../components/ui/TextHoverEffect").then((m) => ({ default: m.TextHoverEffect }))
 );
@@ -29,13 +27,11 @@ const Todos = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState(1);
-  // errors handled via react-toastify
   const [todotype, setTodotype] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [lastTodo, setLastTodo] = useState(null);
 
-  // Fetch all todos on token availability
   const fetchTodos = async () => {
     if (!token) return;
     try {
@@ -48,30 +44,33 @@ const Todos = () => {
 
   useEffect(() => {
     fetchTodos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [token, search]);
 
-  // Handle creating new todo
-  const handleCreate = async (e) => {
-    e.preventDefault();
+
+  const handleCreate = async () => {
+    console.log("handleCreate called with:", { title, todotype, priority });
+    
+    if (!title.trim() || !todotype) {
+      console.log("Validation failed");
+      toast.error("Please enter the title and choose todo type", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        newestOnTop: true,
+        closeOnClick: true,
+        rtl: false,
+        pauseOnFocusLoss: true,
+        draggable: true,
+        pauseOnHover: true,
+        theme: "dark",
+        transition: Bounce,
+      });
+      throw new Error("Validation failed");
+    }
+    
     try {
-      // Frontend validation: title and type are required
-      if (!title.trim() || !todotype) {
-        toast.error("Please enter the title and choose todo type", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          newestOnTop: true,
-          closeOnClick: true,
-          rtl: false,
-          pauseOnFocusLoss: true,
-          draggable: true,
-          pauseOnHover: true,
-          theme: "dark",
-          transition: Bounce,
-        });
-        return;
-      }
+      console.log("Creating todo...");
       const created = await createTodo(
         {
           title,
@@ -83,6 +82,8 @@ const Todos = () => {
         },
         token
       );
+      console.log("Todo created successfully:", created);
+      
       setLastTodo(created);
       setTitle("");
       setDescription("");
@@ -91,6 +92,12 @@ const Todos = () => {
       setShowToast(true);
       setModalOpen(true);
       setTimeout(() => setShowToast(false), 1200);
+      
+      console.log("Fetching updated todos...");
+      await fetchTodos();
+      console.log("Todos fetched successfully");
+      
+      return created;
     } catch (err) {
       console.error("Error creating todo:", err);
       const apiMsg = err?.response?.data?.error;
@@ -107,19 +114,20 @@ const Todos = () => {
         theme: "dark",
         transition: Bounce,
       });
+
+      throw err;
     }
   };
 
-  // Exact title matches only (case-insensitive)
   const exactMatches = (search || "").trim().length
     ? todos.filter((t) => t.title?.toLowerCase() === search.toLowerCase())
     : [];
 
   return (
     <div className="relative min-h-screen w-full bg-black">
-      {/* Grid background overlay */}
+
       <div className="pointer-events-none absolute inset-0 -z-10 [background-size:40px_40px] [background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]" />
-      {/* Radial mask for subtle fade */}
+
       <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black" />
 
       <div className="w-full max-w-6xl mx-auto px-4 md:px-6 py-6 relative">
@@ -165,8 +173,6 @@ const Todos = () => {
             <span>Todo added successfully</span>
           </div>
         )}
-        {/* errors are shown via react-toastify */}
-
         <div className="mb-4">
           <div className="w-full max-w-2xl mx-auto">
             <input
@@ -179,15 +185,13 @@ const Todos = () => {
           </div>
         </div>
 
-        <form
+        <div
           id="quick-add"
-          onSubmit={handleCreate}
           className="relative overflow-hidden isolate bg-gray-950/80 backdrop-blur p-7 rounded-2xl shadow-md border border-white/10 ring-1 ring-white/10 transition hover:ring-white/40 w-full max-w-2xl mx-auto min-h-[380px]"
         >
           <Suspense fallback={null}>
             <GlowingEffect />
           </Suspense>
-          {/* Dark Grid background layers inside form */}
           <div className="pointer-events-none absolute inset-0 -z-10">
             <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900 to-black opacity-80 dark:opacity-90"></div>
             <div className="absolute inset-0 [background-image:linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:32px_32px] [background-position:center_center] opacity-60"></div>
@@ -251,7 +255,7 @@ const Todos = () => {
               </HoverBorderGradient>
             </div>
           </div>
-        </form>
+        </div>
 
         <div className="mt-6 text-center text-gray-600 dark:text-gray-300">
           <p>
