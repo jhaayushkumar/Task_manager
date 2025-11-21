@@ -18,6 +18,36 @@ app.use(cors({
 
 const PORT = process.env.PORT || 3000;
 
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    message: 'Task Manager API is running',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Test database connection endpoint
+app.get('/health', async (req, res) => {
+  try {
+    const prisma = require('./config/db');
+    await prisma.$connect();
+    const userCount = await prisma.user.count();
+    res.json({ 
+      status: 'healthy', 
+      database: 'connected',
+      users: userCount,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: 'unhealthy', 
+      database: 'disconnected',
+      error: error.message 
+    });
+  }
+});
+
 app.use("/auth", require("./routes/authRoutes"));
 app.use('/users', require('./routes/userRoutes'));
 app.use("/todos", auth, require("./routes/todosRoute"));
