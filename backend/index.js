@@ -12,7 +12,9 @@ app.use(cors({
     'http://localhost:3000',
     'https://task-manager-eight-rose-22.vercel.app'
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 
