@@ -77,7 +77,6 @@ const Todos = () => {
           description,
           todotype,
           priority,
-          userId: user.id,
           userEmail: user.email,
         },
         token
