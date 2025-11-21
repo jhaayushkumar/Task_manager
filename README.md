@@ -4,8 +4,8 @@
   <p>Plan smarter, do faster. A full‑stack Todo app with authentication, priorities, search, and a modern UI.</p>
 
   <p>
-    <a href="https://personal-task-manager-iota.vercel.app"><img alt="Frontend" src="https://img.shields.io/badge/Frontend-Vercel-000000?logo=vercel" /></a>
-    <a href="https://personal-task-manager-acbx.onrender.com"><img alt="Backend" src="https://img.shields.io/badge/Backend-Render-46E3B7?logo=render&logoColor=000" /></a>
+    <a href="https://task-manager-eight-rose-22.vercel.app"><img alt="Frontend" src="https://img.shields.io/badge/Frontend-Vercel-000000?logo=vercel" /></a>
+    <a href="https://task-manager-1-tgjv.onrender.com"><img alt="Backend" src="https://img.shields.io/badge/Backend-Render-46E3B7?logo=render&logoColor=000" /></a>
     <img alt="React" src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=000" />
     <img alt="Vite" src="https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=fff" />
     <img alt="Tailwind" src="https://img.shields.io/badge/TailwindCSS-3-38BDF8?logo=tailwindcss&logoColor=fff" />
@@ -40,8 +40,8 @@
 
 ## Live URLs
 
-- Frontend (Vercel): https://personal-task-manager-iota.vercel.app
-- Backend (Render): https://personal-task-manager-acbx.onrender.com
+- Frontend (Vercel): https://task-manager-eight-rose-22.vercel.app
+- Backend (Render): https://task-manager-1-tgjv.onrender.com
 
 ## Tech Stack
 
@@ -93,7 +93,7 @@ JWT_SECRET=your-long-secret
 Frontend (`frontend/.env`):
 
 ```
-VITE_API_BASE=https://personal-task-manager-acbx.onrender.com
+VITE_API_BASE=https://task-manager-1-tgjv.onrender.com
 # For local backend use: VITE_API_BASE=http://localhost:3000
 ```
 
@@ -143,7 +143,7 @@ Backend is a Node server. Ensure `backend/.env` is configured and Prisma has mig
   - Framework: Vite
   - Build command: `npm run build`
   - Output directory: `dist`
-  - Env: `VITE_API_BASE=https://personal-task-manager-acbx.onrender.com`
+  - Env: `VITE_API_BASE=https://task-manager-1-tgjv.onrender.com`
 
 - Backend (Render)
   - Environment: Node
@@ -155,7 +155,7 @@ CORS is enabled at the backend (`app.use(cors())`).
 
 ## API Overview (Backend)
 
-Base URL: `https://personal-task-manager-acbx.onrender.com`
+Base URL: `https://task-manager-1-tgjv.onrender.com`
 
 - Auth
   - POST `/auth/signup` → { name, email, password } → { message, userId }
